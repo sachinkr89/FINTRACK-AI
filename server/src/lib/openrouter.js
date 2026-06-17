@@ -1,11 +1,6 @@
-/**
- * Unified helper to call OpenRouter completions with automatic failover.
- * @param {Array} messages - Chat completions message list
- * @param {Array<string>} models - Prioritized list of model strings to attempt
- * @returns {Promise<string>} The first successful model completion content
- */
 export async function callOpenRouter(messages, models) {
-  if (!process.env.OPENROUTER_API_KEY) {
+  const apiKey = process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.replace(/['"]/g, '').trim() : '';
+  if (!apiKey) {
     throw new Error('OPENROUTER_API_KEY environment variable is not configured.');
   }
 
@@ -18,7 +13,7 @@ export async function callOpenRouter(messages, models) {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Authorization': `Bearer ${apiKey}`,
           'HTTP-Referer': 'http://localhost:5000',
           'X-Title': 'FinTrack AI',
           'Content-Type': 'application/json'
