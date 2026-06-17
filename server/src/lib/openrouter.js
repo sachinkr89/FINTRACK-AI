@@ -1,11 +1,18 @@
 export async function callOpenRouter(messages, models) {
-  const apiKey = process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.replace(/['"]/g, '').trim() : '';
+  let apiKey = process.env.OPENROUTER_API_KEY ? process.env.OPENROUTER_API_KEY.replace(/['"]/g, '').trim() : '';
+  
+  // Auto-prepend the prefix if the user pasted only the hex part on Render
+  if (apiKey && !apiKey.startsWith('sk-or-v1-')) {
+    apiKey = 'sk-or-v1-' + apiKey;
+  }
+
   if (!apiKey) {
     throw new Error('OPENROUTER_API_KEY environment variable is not configured.');
   }
 
   // Safe debugging to inspect key properties
-  console.log(`[OpenRouter Debug] Key length: ${apiKey.length}, starts with: "${apiKey.substring(0, 10)}...", ends with: "...${apiKey.substring(apiKey.length - 5)}"`);
+  console.log(`[OpenRouter Debug] Key length: ${apiKey.length}, starts with: "${apiKey.substring(0, 18)}...", ends with: "...${apiKey.substring(apiKey.length - 5)}"`);
+
 
 
   let lastError = null;
