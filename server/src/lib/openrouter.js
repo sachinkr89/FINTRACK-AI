@@ -4,6 +4,10 @@ export async function callOpenRouter(messages, models) {
     throw new Error('OPENROUTER_API_KEY environment variable is not configured.');
   }
 
+  // Safe debugging to inspect key properties
+  console.log(`[OpenRouter Debug] Key length: ${apiKey.length}, starts with: "${apiKey.substring(0, 10)}...", ends with: "...${apiKey.substring(apiKey.length - 5)}"`);
+
+
   let lastError = null;
 
   for (const model of models) {
